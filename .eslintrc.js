@@ -8,17 +8,16 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 'latest',
     sourceType: 'module',
   },
   plugins: [
     '@typescript-eslint',
   ],
   rules: {
-    'linebreak-style': [
-      'error',
-      'windows',
-    ],
+    'linebreak-style': 'off',
     'no-console': 'off',
+    'import/no-unresolved': 'off',
+    'import/extensions': 'off',
   },
 };

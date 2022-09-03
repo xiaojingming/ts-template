@@ -5,7 +5,7 @@ const ForkTsCheckWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  entry: './ts/es6/',
+  entry: './ts/es6/arrow.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
@@ -66,11 +66,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new ForkTsCheckWebpackPlugin({
       eslint: {
-        files: './ts/es6/es/*.ts',
+        files: './ts/es6/*.ts',
       },
       typescript: {
         configOverwrite: {
-          include: ['./ts/es6/es/*.ts', './type/type.d.ts'],
+          include: ['./ts/es6/*.ts', './type/type.d.ts'],
         },
       },
     }),
