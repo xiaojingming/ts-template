@@ -5,7 +5,7 @@ const ForkTsCheckWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  entry: './ts/topic/filter.ts',
+  entry: './ts/topic/type.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
