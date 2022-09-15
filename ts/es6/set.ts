@@ -1,3 +1,7 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-cond-assign */
 /* eslint-disable no-self-compare */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
@@ -11,6 +15,41 @@ interface MySetInstance {
     callback: (val: any, key: any, set: any) => void,
     thisArg: any,
   ): void;
+  keys<T>(): IterableIterator<T>;
+  values<T>(): IterableIterator<T>;
+  entries<T>(): IterableIterator<T>;
+}
+
+function makeIterator(target: any, iterator: any) {
+  let i = 0;
+  const obj = {
+    next() {
+      const done = i === target.length;
+      const value = !done ? iterator(target[i++]) : undefined;
+      return {
+        done,
+        value,
+      };
+    },
+  };
+  (obj as any)[Symbol.iterator] = function f() {
+    return obj;
+  };
+  return obj;
+}
+
+function forOf(target: any, callback: (...res: any[]) => void) {
+  if (typeof target[Symbol.iterator] !== 'function') {
+    throw new TypeError(`${target} is not iterable`);
+  }
+  if (typeof callback !== 'function') {
+    throw new TypeError(`${callback} must be callable`);
+  }
+  const iter = target[Symbol.iterator]();
+  let val;
+  while (!(val = iter.next()).done) {
+    callback(val.value);
+  }
 }
 
 (function f(context) {
@@ -20,7 +59,7 @@ interface MySetInstance {
     this._values = [];
     this.size = 0;
     if (data) {
-      data.forEach((item: any) => {
+      forOf(data, (item: any) => {
         this.add(item);
       });
     }
@@ -58,14 +97,23 @@ interface MySetInstance {
     this.size = 0;
   };
 
+  Set.prototype.values = Set.prototype.keys = function fn() {
+    return makeIterator(this._values, (i: any) => encode(i));
+  };
+
+  Set.prototype.entries = function entries() {
+    return makeIterator(this._values, (i: any) => [encode(i), encode(i)]);
+  };
+
   Set.prototype.forEach = function forEach(
     callback: (val: any, key: any, set: any) => void,
     thisArg = window,
   ) {
-    for (let i = 0; i < this._values.length; i += 1) {
-      const val = this._values[i];
-      callback.call(thisArg, val, val, this);
-    }
+    forOf(this._values, (i) => callback.call(thisArg, i, i, this));
+  };
+
+  Set.prototype[Symbol.iterator] = function iterator() {
+    return this.keys();
   };
 
   Set._length = 0;
@@ -87,4 +135,25 @@ s2.add(NaN);
 console.log(s2.size);
 s2.add(NaN);
 console.log(s2.size);
+console.log('%c---------------->', 'color: red;');
+
+const set = new Set([1, 2, 3]);
+console.log(set.keys());
+console.log([...set]);
+console.log([...set.keys()]);
+console.log([...set.values()]);
+console.log([...set.entries()]);
+console.log(new Set(new Set([1, 2, 3])).size); // 3
+console.log('%c---------------->', 'color: red;');
+
+const s3: MySetInstance = new ((window as any).MySet)(new Set([1, 2, 3]));
+for (const key of (s3 as any)) {
+  console.log(key, '---'); // 1 2 3
+}
+console.log([...s3.keys()]); // [1, 2, 3]
+console.log([...s3.values()]); // [1, 2, 3]
+console.log([...s3.entries()]); // [[1, 1], [2, 2], [3, 3]]
+s3.forEach((i, v) => {
+  console.log(i, v);
+}, window);
 export {};
