@@ -7,6 +7,7 @@
     "dev": "webpack server",
     "start": "npm run dev"
   },
+  "type": "module",
   "keywords": [],
   "author": "xiao",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "core-js": "^3.19.1",
     "eslint-webpack-plugin": "^3.2.0",
     "fork-ts-checker-webpack-plugin": "^6.5.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.3.4",
     "webpack-dev-server": "^4.4.0"
   },

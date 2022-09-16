@@ -5,14 +5,19 @@ const ForkTsCheckWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  // entry: './ts/es6/weakMap.ts',
-  entry: './ts/topic/flatten.ts',
+  entry: './ts/es6/promise.ts',
+  // entry: './ts/topic/flatten.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    fallback: {
+      fs: false,
+      path: false,
+      url: false,
+    },
   },
   devServer: {
     client: {
