@@ -40,14 +40,14 @@ function eachWithoutCall(target: any, callback: (i: number | string, v: any) => 
     }
   }
 }
-let i1 = 0;
-let sum1 = 0;
+// let i1 = 0;
+// let sum1 = 0;
 const num = 10000000;
-console.time('not each');
-for (; i1 < num; i1 += 1) {
-  sum1 += i1;
-}
-console.timeEnd('not each');
+// console.time('not each');
+// for (; i1 < num; i1 += 1) {
+//   sum1 += i1;
+// }
+// console.timeEnd('not each');
 let sum2 = 0;
 let sum3 = 0;
 const arr = new Array(num).fill('').map((i) => i);
@@ -57,7 +57,7 @@ each(arr, (i) => {
 });
 console.timeEnd('each');
 console.time('each without call');
-each(arr, (i) => {
+eachWithoutCall(arr, (i) => {
   sum3 += Number(i);
 });
 console.timeEnd('each without call');
