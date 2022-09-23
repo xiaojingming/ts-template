@@ -6,7 +6,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   // entry: './ts/es6/promise2.ts',
-  entry: './ts/topic/equal.ts',
+  entry: './ts/topic/curry.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
