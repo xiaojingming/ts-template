@@ -5,8 +5,8 @@ const ForkTsCheckWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  // entry: './ts/es6/promise2.ts',
-  entry: './ts/topic/curry.ts',
+  // entry: './ts/es6/generator.ts',
+  entry: './ts/topic/lazy.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
