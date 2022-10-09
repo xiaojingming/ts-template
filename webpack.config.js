@@ -6,7 +6,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   // entry: './ts/es6/generator.ts',
-  entry: './ts/topic/lazy.ts',
+  entry: './ts/topic/compose.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,

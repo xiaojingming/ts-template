@@ -79,20 +79,49 @@ function run2(g) {
 }
 
 // run2(gen2);
+function thunkToPromise(fn) {
+  return new Promise((resolve, reject) => {
+    fn((err, res) => {
+      if (err) {
+        return reject(err);
+      }
+      reject(res);
+    });
+  });
+}
+
+function toPromise(target) {
+  if (isPromise(target)) {
+    return target;
+  }
+  if (typeof target === 'function') {
+    return thunkToPromise(target);
+  }
+  return target;
+}
 
 function run(g) {
   const it = g();
-  function next(data) {
-    const res = it.next();
-    if (res.done) {
-      return;
+  return new Promise((resolve, reject) => {
+    function next(data) {
+      let res;
+      try {
+        res = it.next();
+      } catch (error) {
+        reject(error);
+      }
+      if (res.done) {
+        return resolve(res.value);
+      }
+      const val = toPromise(res.value);
+      val.then((v) => next(v), (e) => reject(e));
+      // if (isPromise(res.value)) {
+      //   res.value
+      //     .then((v) => it.next(v));
+      // } else {
+      //   res.value((v) => it.next(v));
+      // }
     }
-    if (isPromise(res.value)) {
-      res.value
-        .then((v) => it.next(v));
-    } else {
-      res.value((v) => it.next(v));
-    }
-  }
-  next();
+    next();
+  });
 }
