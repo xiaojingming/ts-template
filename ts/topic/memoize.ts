@@ -54,4 +54,5 @@ for (let i = 0; i <= 10; i += 1) {
   fib(i);
 }
 console.log(count2);
+
 export {};
