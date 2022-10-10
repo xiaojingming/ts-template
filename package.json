@@ -7,7 +7,6 @@
     "dev": "webpack server",
     "start": "npm run dev"
   },
-  "type": "module",
   "keywords": [],
   "author": "xiao",
   "license": "ISC",
