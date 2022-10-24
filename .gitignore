@@ -1,2 +1,3 @@
 node_modules
 dist
+./js/generator-es5.js
