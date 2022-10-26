@@ -1,204 +1,103 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-interface F {
-  (...res: any[]): any;
-}
-interface O {
-  [key: string]: any;
-}
-
-const arr1 = [1, 1, '1', '1'];
+const arr1 = [1, [2, [3, 4]]];
 
 /**
- * 通过双层for循环过滤数组
- * @param arr 待过滤的数组
- * @returns 过滤后的数组
+ * 通过递归将多维数组扁平化
+ * @param arr 多维数组
+ * @returns 一维数组
  */
-function unique1(arr: any[]) {
-  const res: any[] = [];
+function flatten1(arr: any[]) {
+  let res: any[] = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    res = res.concat(Array.isArray(arr[i]) ? flatten1(arr[i]) : arr[i]);
+  }
+  return res;
+}
+console.log(flatten1(arr1)); // [1, 2, 3, 4]
+
+/**
+ * 通过toString简化，但使用场景非常有限，只能处理元素类型都是number的情况
+ * @param arr 多维数组，但元素都是数字类型
+ * @returns 一维数组
+ */
+function flatten2(arr: any[]) {
+  return arr.toString().split(',').map((v) => Number(v));
+}
+console.log(flatten2(arr1)); // [1, 2, 3, 4]
+
+/**
+ * 通过reduce进行简化，实现数组扁平化
+ * @param arr 多维数组
+ * @returns 一维数组
+ */
+function flatten3(arr: any[]) {
+  return arr.reduce((prev, cur) => prev.concat(Array.isArray(cur) ? flatten3(cur) : cur), []);
+}
+console.log(flatten3(arr1)); // [1, 2, 3, 4]
+
+/**
+ * 通过while循环实现数组扁平化
+ * @param arr 多维数组
+ * @returns 一维数组
+ */
+function flatten4(arr: any[]) {
+  let res = [].concat(...arr);
+  while (res.some(Array.isArray)) {
+    res = [].concat(...res);
+  }
+  return res;
+}
+console.log(flatten4(arr1)); // [1, 2, 3, 4]
+console.log('%c---------------->', 'color: red;');
+
+/**
+ * 数组扁平化
+ * @param arr 要处理的数组
+ * @param shallow 是否只扁平一层
+ * @param strict 是否严格处理元素
+ * @param output 处理完后的数组
+ */
+function flatten(arr: any[], shallow: boolean, strict: boolean, output: any[] = []) {
+  let idx = output.length;
   for (let i = 0; i < arr.length; i += 1) {
     const val = arr[i];
-    let j = 0;
-    for (; j < res.length; j += 1) {
-      if (val === res[j]) {
-        break;
+    if (Array.isArray(val)) {
+      if (shallow) {
+        for (let j = 0; j < val.length; j += 1) {
+          output[idx++] = val[j];
+        }
+      } else {
+        flatten(val, shallow, strict, output);
       }
-    }
-    if (j === res.length) {
-      res.push(val);
-    }
-  }
-  return res;
-}
-
-console.log(unique1(arr1)); // [1, '1']
-
-const arr2 = [1, 1, '1'];
-
-/**
- * 通过indexOf过滤内存数组
- * @param arr 待过滤的数组
- * @returns 过滤后的数组
- */
-function unique2(arr: any[]) {
-  const res: any[] = [];
-  for (let i = 0; i < arr.length; i += 1) {
-    const val = arr[i];
-    if (res.indexOf(val) === -1) {
-      res.push(val);
+    } else if (!strict) {
+      output[idx++] = val;
     }
   }
-
-  return res;
+  return output;
 }
+const arr2 = [1, [2, [3, 4]]];
+console.log(flatten(arr2, true, true)); // [2, [3, 4]]
+console.log(flatten(arr2, true, false)); // [1, 2, [3, 4]]
+console.log(flatten(arr2, false, false)); // [1, 2, 3, 4]
+console.log(flatten(arr2, false, true)); // []
+console.log('%c---------------->', 'color: red;');
 
-console.log(unique2(arr2)); // [1, '1']
-
-const arr3 = [1, 1, '1'];
-
-/**
- * 排序后去重
- * @param arr 待过滤的数组
- * @returns 过滤后的数组
- */
-function unique3(arr: any[]) {
-  const sortArr: any[] = arr.concat().sort();
-  const res: any[] = [];
-  for (let i = 0; i < sortArr.length; i += 1) {
-    const val = sortArr[i];
-    if (!i || val !== sortArr[i - 1]) {
-      res.push(val);
-    }
-  }
-  return res;
+function $flatten(arr: any[], shallow: boolean) {
+  return flatten(arr, shallow, false);
 }
+console.log($flatten(arr2, false)); // [1, 2, 3, 4]
 
-console.log(unique3(arr3)); // [1, '1']
-
-const arr4 = [1, 2, '1', 2, 1];
-const arr5 = [1, 1, '1', 2, 2];
-
-/**
- * 通用unique函数
- * @param arr 待过滤数组
- * @param isSorted 数组是否排序
- * @returns 过滤后的数组
- */
-function unique4(arr: any[], isSorted = false) {
-  const res: any[] = [];
-  let prev: any | null;
-  for (let i = 0; i < arr.length; i += 1) {
-    const val = arr[i];
-    if (isSorted && (!i || val !== prev)) {
-      res.push(val);
-      prev = val;
-    } else if (res.indexOf(val) === -1) {
-      res.push(val);
-    }
-  }
-  return res;
+// 该函数传入多个数组，然后返回传入的数组的并集，如果传入的不是数组，跳过该参数
+function $union(...params: any[]) {
+  return [...new Set(flatten(params, true, true))];
 }
+console.log($union([1, 2, 3], [101, 2, 1, 10], [2, 1])); // [1, 2, 3, 101, 10]
 
-console.log(unique4(arr4)); // [1, 2, '1']
-console.log(unique4(arr5, true)); // [1, '1', 2]
-
-const arr6 = [1, 1, 'a', 'A', 2, 2];
-
-/**
- * unique函数的优化，通过回调函数进一步过滤数据
- * @param arr 待过滤的数组
- * @param isSorted 是否排序
- * @param iterator 回调函数
- * @returns 过滤后的数组
- */
-function unique6(arr: any[], isSorted: boolean, iterator?: F) {
-  const res: any[] = [];
-  const iterRes: any[] = [];
-  let prev: any | null;
-  for (let i = 0; i < arr.length; i += 1) {
-    const val: any = iterator ? iterator(arr[i]) : arr[i];
-    if (isSorted && (!i || prev !== val)) {
-      res.push(arr[i]);
-      prev = val;
-    } else if (iterRes.indexOf(val) === -1) {
-      res.push(arr[i]);
-      iterRes.push(val);
-    }
-  }
-  return res;
+function $difference(...params: any[]) {
+  return params[0].filter((i: number) => !flatten(params.slice(1), true, true)
+    .includes(i));
 }
-
-console.log(unique6(
-  arr6,
-  false,
-  (i: any) => (typeof i === 'string' ? i.toUpperCase() : i),
-)); // [1, 'a', 2]
-
-const arr7 = [1, 2, 1, 1, '1'];
-
-/**
- * 通过filter简化外层循环
- * @param arr 待过滤数组
- * @returns 过滤后的数组
- */
-function unique7(arr: any[]) {
-  return arr.filter((item, index) => arr.indexOf(item) === index);
-}
-
-console.log(unique7(arr7)); // [1, 2, '1']
-
-const arr8 = [1, 2, 1, 1, '1'];
-
-/**
- * 通过filter简化排序后的数组的外层循环
- * @param arr 待过滤数组
- * @returns 过滤后的数组
- */
-function unique8(arr: any[]) {
-  const sortArr = arr.concat().sort();
-  return sortArr.filter((item, index) => (!index || item !== sortArr[index - 1]));
-}
-
-console.log(unique8(arr8)); // [1, '1', 2]
-
-const arr9 = [{ value: 1 }, { value: 1 }, { value: 2 }];
-/**
- * 通过键值对来存储过滤数组
- * @param arr 待过滤数组
- * @returns 过滤后的数组
- */
-function unique9(arr: any[]) {
-  const obj: O = {};
-  return arr.filter((item) => {
-    const key = `${typeof item}${JSON.stringify(item)}`;
-    if (Reflect.has(obj, key)) {
-      return true;
-    }
-    Reflect.set(obj, key, true);
-    return false;
-  });
-}
-console.log(unique9(arr9)); // [{ value: 1 }]
-
-const arr10 = [1, 2, 1, 1, '1'];
-
-/**
- * 通过ES6简化过滤
- * @param arr 待过滤数组
- * @returns 过滤后的数组
- */
-function unique10(arr: any[]) {
-  return [...new Set(arr)];
-}
-console.log(unique10(arr10));
-
-// eslint-disable-next-line no-new-wrappers
-const arrs = [1, 1, '1', '1', null, null, undefined, undefined, new String('1'), new String('1'), /a/, /a/, NaN, NaN];
-
-console.log(unique1(arrs));
-console.log(unique2(arrs));
-console.log(unique3(arrs));
-console.log(unique7(arrs));
-console.log(unique9(arrs));
-console.log(unique10(arrs));
-
-export { };
+console.log($difference([1, 2, 3, 4, 5], [5, 2, 10], [4], 3)); // [1, 3]
+export {};
