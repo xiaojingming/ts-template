@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 /* eslint-disable consistent-return */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
@@ -12,7 +13,9 @@ interface F<T> {
     t: T
   ): void | false;
 }
-function each<T>(target: T, callback: F<T>) {
+function each<T extends O>(target: T, iteratee: F<T>): void;
+function each<T extends any[]>(target: T, iteratee: F<T>): void;
+function each(target: any[] | O, callback: F<typeof target>) {
   if (Array.isArray(target)) {
     for (let i = 0; i < target.length; i += 1) {
       if (callback.call(target[i], i, target[i], target) === false) {
@@ -27,21 +30,21 @@ function each<T>(target: T, callback: F<T>) {
     }
   }
 }
-function each2<T>(target: T, callback: F<T>) {
-  if (Array.isArray(target)) {
-    for (let i = 0; i < target.length; i += 1) {
-      if (callback(i, target[i], target) === false) {
-        break;
-      }
-    }
-  } else {
-    for (const key in target) {
-      if (callback(key, target[key], target) === false) {
-        break;
-      }
-    }
-  }
-}
+// function each2<T>(target: T, callback: F<T>) {
+//   if (Array.isArray(target)) {
+//     for (let i = 0; i < target.length; i += 1) {
+//       if (callback(i, target[i], target) === false) {
+//         break;
+//       }
+//     }
+//   } else {
+//     for (const key in target) {
+//       if (callback(key, target[key], target) === false) {
+//         break;
+//       }
+//     }
+//   }
+// }
 
 const arr = [0, 1, 2];
 const obj = {

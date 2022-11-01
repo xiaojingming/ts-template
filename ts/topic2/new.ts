@@ -22,5 +22,6 @@ function myNew(Ctor: (...res: any[]) => any, ...params: any[]) {
 }
 
 const p1 = myNew(Person, 'xiao', 25);
-console.log(p1.getAge(), p1.getName());
+console.log(p1.getAge(), p1.getName()); // 25 'xiao'
+
 export {};
