@@ -117,7 +117,6 @@ function helloWorldGenerator() {
 }
 
 var hw = helloWorldGenerator();
-
 console.log(hw.next());
 console.log(hw.next());
 console.log(hw.next());
