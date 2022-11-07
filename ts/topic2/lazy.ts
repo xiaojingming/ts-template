@@ -54,6 +54,7 @@ const foo3: F = function fn() {
   foo3.date = new Date();
   return foo3.date;
 };
+
 console.log(foo3());
 console.log(foo3());
 console.log(foo3());
