@@ -5,8 +5,8 @@ const ForkTsCheckWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  entry: './ts/es6/definePropertyOrProxy.ts',
-  // entry: './ts/topic2/lazy.ts',
+  // entry: './ts/es6/definePropertyOrProxy.ts',
+  entry: './ts/topic2/compose.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,

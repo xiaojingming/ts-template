@@ -60,3 +60,4 @@ export const data = {
 
 export type Data = typeof data;
 export type Item = Data['tasks'][number];
+export type FilterItem = Omit<Item, 'complete' | 'created' | 'username'>
