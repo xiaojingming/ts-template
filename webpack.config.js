@@ -6,7 +6,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   // entry: './ts/es6/definePropertyOrProxy.ts',
-  entry: './ts/topic2/compose.ts',
+  entry: './ts/topic2/memoize.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
