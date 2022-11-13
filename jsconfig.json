@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2020",
+    "target": "ESNext",
     "jsx": "preserve",
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",
