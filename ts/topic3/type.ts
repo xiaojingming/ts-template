@@ -18,7 +18,7 @@ function getType(target: any): BasicTypes {
   // }
   return typeof target === 'object' || typeof target === 'function'
     ? obj[Object.prototype.toString.call(target)] || 'object'
-    : target;
+    : typeof target;
 }
 
 function isFunction(target: any) {
