@@ -27,6 +27,7 @@ function each(target: any[] | O, predicate: F) {
     }
   }
 }
+
 function eachNoCall(target: any[] | O, predicate: F) {
   if (Array.isArray(target)) {
     for (let i = 0; i < target.length; i += 1) {
@@ -42,6 +43,7 @@ function eachNoCall(target: any[] | O, predicate: F) {
     }
   }
 }
+
 // 遍历数组
 each([0, 1, 2], (i, n) => {
   console.log(`Item # ${i}: ${n}`);
