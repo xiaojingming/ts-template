@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 interface F {
