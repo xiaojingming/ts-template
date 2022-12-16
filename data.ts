@@ -2,6 +2,15 @@ export const data = {
   result: 'SUCCESS',
   tasks: [
     {
+      id: 103,
+      complete: true,
+      priority: 'high',
+      dueDate: '2013-11-27',
+      username: 'Scott',
+      title: 'Do something early',
+      created: '7/22/2013',
+    },
+    {
       id: 104,
       complete: false,
       priority: 'high',
