@@ -1,7 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-unused-vars */
 // 输入 'kevin'，返回 'HELLO, KEVIN'。
-import { data, Data } from '../../data';
+import { data } from '../../data';
 
 interface F {
   (...res: any[]): any,
@@ -98,7 +98,6 @@ const getIncompleteTaskSummaries = function fn(membername: string) {
     .then(sortCurry(compose(timeCurry, getCurry('dueDate'))))
     .then(console.log);
 };
-
 getIncompleteTaskSummaries('Scott');
 
 export {};
