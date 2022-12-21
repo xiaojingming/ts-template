@@ -7,7 +7,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 module.exports = {
   // entry: './ts/es6/handbook.ts',
   // entry: './ts/es6-2/arrow.ts',
-  entry: './ts/topic3/memoize.ts',
+  entry: './ts/topic3/recursion.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
