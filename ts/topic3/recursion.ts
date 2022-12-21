@@ -32,6 +32,6 @@ function partial(fn: F, ...res: any[]) {
 }
 
 const factorial2Partial = partial(factorial2, _, 1);
-console.log(factorial2Partial(5));
+console.log(factorial2Partial(5)); // 120
 
 export {};

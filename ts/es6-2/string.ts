@@ -1,54 +1,54 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-tabs */
+/* eslint-disable no-debugger */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-expressions */
-const arr = [{
-  value: 1,
-}, {
-  value: 2,
-}];
-
-const message = `
-  <ul>
-    ${arr.map((item) => `<li>${item.value}</li>`).join('\n')}
-  </ul>
-`;
-console.log(message);
-
 const x = 'Hi';
 const y = 'xiao';
 
-function msg(literals: string[], ...v: string[]) {
-  let result = '';
-  result = literals.reduce((prev, cur, cIndex) => {
-    prev += cur + (v[cIndex] || '');
+function msg(...params: any[]) {
+  const literals: string[] = params[0];
+  const args = params.slice(1);
+  let i = 0;
+  return literals.reduce((prev, cur) => {
+    prev += cur === '' ? args[i++] : cur;
     return prev;
-  }, result);
-  result = result.replace(/(\n\s*)/g, ' ').trim();
-  return result;
+  }, '');
 }
 
-console.log(msg`
-  Hi,
-	xiao!
-	I am
-	xjm.
-`);
+console.log(msg`${x}, I am ${y}`);
+console.log('%c---------------->', 'color: red;');
 
-console.log(msg`
+function oneLine(...params: any[]) {
+  const literals: string[] = params[0];
+  return literals.reduce((prev, cur) => {
+    prev += cur;
+    return prev;
+  }, '').replaceAll(/(\s)+/g, ' ').trim();
+}
+
+const msg1 = oneLine`
+    Hi,
+    Daisy!
+    I am
+    Kevin.
+`;
+console.log(msg1); // Hi, Daisy! I am Kevin.
+console.log('%c---------------->', 'color: red;');
+
+const msg2 = oneLine`
   Preserve eg sentences.  Double
   spaces within input lines.
-`);
+`;
+console.log(msg2);
+console.log('%c---------------->', 'color: red;');
 
-function stripIndents(literals: string[], ...v: string[]) {
-  let result = '';
-  result = literals.reduce((prev, cur, cIndex) => {
-    prev += cur + (v[cIndex] || '');
+function stripIndents(...params: any[]) {
+  const literals: string[] = params[0];
+  return literals.reduce((prev, cur) => {
+    prev += cur;
     return prev;
-  }, result);
-  // result = result.replace(/\n[^\S\n]*/g, '\n').trim();
-  result = result.replace(/[^\S\n]*/gm, '').trim(); // 空白字符去除换行符
-  return result;
+  }, '').replaceAll(/(\s)+/g, '\n').trim();
 }
 
 console.log(stripIndents`
@@ -56,28 +56,30 @@ console.log(stripIndents`
 	<span>2<span>
 		<span>3<span>
 `);
+console.log('%c---------------->', 'color: red;');
 
-function stripIndent(literals: string[], ...v: string[]) {
-  let result = '';
-  result = literals.reduce((prev, cur, cIndex) => {
-    prev += cur + (v[cIndex] || '');
+function stripIndent(...params: any[]) {
+  const literals: string[] = params[0];
+  const reg = /^(\s)+/gm;
+  const str = literals.reduce((prev, cur) => {
+    prev += cur;
     return prev;
-  }, result);
-  const match = result.match(/^[^\S\n]*(?=\S)/gm);
-  const indent = match && Math.min.apply(null, match.map((e) => e.length));
-  if (indent) {
-    const reg = new RegExp(`^.{${indent}}`, 'gm');
-    result = result.replace(reg, '');
+  }, '');
+  const res = str.match(reg);
+  let min = 0;
+  if (res) {
+    min = Math.min.apply(null, res.map((i) => i.length));
   }
-  return result;
+  const $reg = new RegExp(`^.{${min}}`, 'gm');
+  return str.replaceAll($reg, '');
 }
 
 console.log(stripIndent`
-	<ul>
-		<li>1</li>
-		<li>2</li>
-		<li>3</li>
-	<ul>
+	  <ul>
+		  <li>1</li>
+		  <li>2</li>
+		  <li>3</li>
+	  <ul>
 `);
 
 export {};
