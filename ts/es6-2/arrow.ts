@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable no-unused-vars */
 function Button(id: string) {
   this.element = document.querySelector(`#${id}`);
@@ -5,11 +6,11 @@ function Button(id: string) {
 }
 
 Button.prototype.bindEvent = function bindEvent() {
-  this.element.addEventListener('click', this.setBgColor, false);
+  this.element.addEventListener('click', () => this.setBgColor(), false);
 };
 
 Button.prototype.setBgColor = function setBgColor() {
-  this.element.style.backGroundColor = '#1abc9c';
+  this.element.style.backgroundColor = '#1abc9c';
 };
 
 const btn = new (Button as any)('btn');
