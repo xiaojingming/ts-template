@@ -1,34 +1,30 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /**
- * 防抖函数的实现，支持立即执行和取消
- * @param fn 目标函数
- * @param time 触发间隔
+ * 防抖函数实现
+ * @param f 目标执行函数
+ * @param time 定时器时间间隔
  * @param immediate 是否立即执行
- * @returns 在立即执行状态下可以存在返回值
+ * @returns 防抖后的目标函数
  */
-function debounce(
-  fn: (...res: any[]) => any,
-  time = 1000,
-  immediate = false,
-) {
+function debounce(f: (...res: any[]) => any, time: number, immediate: boolean) {
   let timer: NodeJS.Timeout | null;
-  let result: any;
-  const ctx = function f(...params: any[]) {
+  const ctx = function fn(...params: any[]) {
+    let result: any;
     if (timer) {
       clearTimeout(timer);
     }
     if (immediate) {
-      const callnow = !timer;
-      if (callnow) {
-        result = fn.apply(this, params);
+      const callNow = !timer;
+      if (callNow) {
+        result = f.apply(this, params);
       }
       timer = setTimeout(() => {
         timer = null;
       }, time);
     } else {
       timer = setTimeout(() => {
-        fn.apply(this, params);
+        f.apply(this, params);
         timer = null;
       }, time);
     }
@@ -37,22 +33,21 @@ function debounce(
   ctx.cancel = function cancel() {
     if (timer) {
       clearTimeout(timer);
+      timer = null;
     }
-    timer = null;
   };
   return ctx;
 }
 
-const app = document.querySelector('#app');
-const cancel = document.querySelector('#cancel');
-const f = debounce((e: Event) => {
-  console.log(e.target, 'move');
-}, 1000, true);
-const cancelFn = f.cancel;
+const app = document.getElementById('app');
+const cancel = document.getElementById('cancel');
+const moveAction = debounce((e: MouseEvent) => {
+  console.log(e.target, 'mover');
+}, 10000, true);
 
 if (app && cancel) {
-  app.addEventListener('mousemove', f);
-  cancel.addEventListener('click', cancelFn);
+  app.addEventListener('mousemove', moveAction);
+  cancel.addEventListener('click', moveAction.cancel);
 }
 
 export {};

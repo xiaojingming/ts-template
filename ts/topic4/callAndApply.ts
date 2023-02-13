@@ -20,29 +20,29 @@ function bar(a: number, b: number) {
 function myCall(context: any) {
   context = context || window;
   context.fn = this;
-  var params: any[] = [];
+  var params = [];
   for (var i = 1; i < arguments.length; i += 1) {
     params.push('arguments[' + i + ']');
   }
-  var result = eval('context.fn(' + params + ')');
+  var res = eval('context.fn(' + params + ')');
   delete context.fn;
-  return result;
+  return res;
 }
 function myApply(context: any, params?: any[]) {
   context = context || window;
   context.fn = this;
-  var result: any;
+  var res;
   if (!params) {
-    result = context.fn();
+    res = context.fn();
   } else {
-    var $params: any[] = [];
+    var $params = [];
     for (var i = 0; i < params.length; i += 1) {
       $params.push('params[' + i + ']');
     }
-    result = eval('context.fn(' + $params + ')');
+    res = eval('context.fn(' + $params + ')');
   }
   delete context.fn;
-  return result;
+  return res;
 }
 
 (Function.prototype as F).myCall = myCall;

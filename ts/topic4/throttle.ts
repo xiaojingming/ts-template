@@ -9,10 +9,10 @@
  */
 function throttle1(fn: (...params: any[]) => any, time = 1000) {
   let prev = 0;
-  return function f(...subParams: any[]) {
+  return function f(...res: any[]) {
     const now = Date.now();
     if (now - prev > time) {
-      fn.apply(this, subParams);
+      fn.apply(this, res);
       prev = Date.now();
     }
   };
@@ -25,10 +25,10 @@ function throttle1(fn: (...params: any[]) => any, time = 1000) {
  */
 function throttle2(fn: (...params: any[]) => any, time = 1000) {
   let timer: NodeJS.Timeout | null;
-  return function f(...subParams: any[]) {
+  return function f(...res: any[]) {
     if (!timer) {
       timer = setTimeout(() => {
-        fn.apply(this, subParams);
+        fn.apply(this, res);
         timer = null;
       }, time);
     }
@@ -41,20 +41,21 @@ function throttle2(fn: (...params: any[]) => any, time = 1000) {
  * @returns 节流后的函数
  */
 function throttle3(fn: (...params: any[]) => any, time = 1000) {
-  let prev = 0;
   let timer: NodeJS.Timeout | null;
-  return function f(...subParams: any[]) {
+  let prev = 0;
+  return function f(...res: any[]) {
     const now = Date.now();
     if (now - prev > time) {
       if (timer) {
         clearTimeout(timer);
         timer = null;
       }
-      fn.apply(this, subParams);
+      fn.apply(this, res);
       prev = Date.now();
     } else if (!timer) {
+      // 最后一次才执行
       timer = setTimeout(() => {
-        fn.apply(this, subParams);
+        fn.apply(this, res);
         timer = null;
         prev = Date.now();
       }, time);
@@ -69,20 +70,20 @@ function throttle(
     trailing: false, //  是否触发离开回调
   },
 ) {
-  let prev = 0;
   let timer: NodeJS.Timeout | null;
-  const ctx = function f(...subParams: any[]) {
+  let prev = 0;
+  const ctx = function f(...res: any[]) {
     const now = Date.now();
     if ((now - prev > time) && option.leading) {
       if (timer) {
         clearTimeout(timer);
         timer = null;
       }
-      fn.apply(this, subParams);
+      fn.apply(this, res);
       prev = Date.now();
     } else if (!timer && option.trailing) {
       timer = setTimeout(() => {
-        fn.apply(this, subParams);
+        fn.apply(this, res);
         timer = null;
         prev = Date.now();
       }, time);
@@ -108,9 +109,9 @@ function throttle(
 // });
 const fn = throttle((e: Event) => {
   console.log(e.target, 'move');
-}, 10000, {
+}, 1000, {
   leading: true,
-  trailing: false,
+  trailing: true,
 });
 const { cancel } = fn;
 const app = document.querySelector('#app');

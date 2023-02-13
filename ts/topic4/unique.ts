@@ -49,8 +49,8 @@ const arr3 = [1, 1, '1', 2, '2', '2'];
  * @returns 去重后的数组
  */
 function unique3(arr: any[]) {
-  const $arr = arr.concat().sort();
   const res: any[] = [];
+  const $arr = arr.concat().sort();
   for (let i = 0; i < $arr.length; i += 1) {
     const val = $arr[i];
     if (!i || val !== $arr[i - 1]) {
@@ -73,15 +73,15 @@ const arr5 = [1, 1, '1', 2, 2];
  */
 function unique4(arr: any[], sorted = false) {
   const res: any[] = [];
-  let prev: any;
   for (let i = 0; i < arr.length; i += 1) {
     const val = arr[i];
-    if (sorted && (!i || val !== prev)) {
-      res.push(val);
+    if (sorted) {
+      if (!i || val !== arr[i - 1]) {
+        res.push(val);
+      }
     } else if (res.indexOf(val) === -1) {
       res.push(val);
     }
-    prev = val;
   }
   return res;
 }
@@ -104,15 +104,16 @@ function unique6<T>(
 ) {
   const res: any[] = [];
   const $res: any[] = [];
-  let prev: any;
   for (let i = 0; i < arr.length; i += 1) {
     const val = iterator ? iterator(arr[i]) : arr[i];
-    if ((sorted && (!i || val !== prev)) || ($res.indexOf(val) === -1)) {
+    if (sorted) {
+      if (!i || $res[i - 1] !== val) {
+        res.push(arr[i]);
+        $res.push(val);
+      }
+    } else if ($res.indexOf(val) === -1) {
       res.push(arr[i]);
       $res.push(val);
-      if (sorted) {
-        prev = val;
-      }
     }
   }
   return res;
@@ -134,14 +135,14 @@ console.log('%c---------------->', 'color: red;');
 
 const arr8 = [1, 2, 1, 1, '1'];
 /**
- * 排序数组filter简化外层循环+indexOf
+ * 排序数组filter简化外层循环
  * @param arr 目标数组
  * @returns 去重后的数组
  */
 function unique8(arr: any[]) {
   return arr.concat().sort().filter((item, index, array) => !index || item !== array[index - 1]);
 }
-console.log(unique8(arr8)); // [1, 2, '1']
+console.log(unique8(arr8)); // [1, '1', 2]
 console.log('%c---------------->', 'color: red;');
 
 const arr9 = [{ value: 1 }, { value: 1 }, { value: 2 }];
@@ -151,14 +152,14 @@ const arr9 = [{ value: 1 }, { value: 1 }, { value: 2 }];
  * @returns 去重后的数组
  */
 function unique9(arr: any[]) {
-  const obj: { [K: string]: any } = {};
+  const obj: { [Key: string]: any } = {};
   return arr.filter((item) => {
-    const key = typeof item + JSON.stringify(item);
-    if (!Reflect.has(obj, key)) {
-      Reflect.set(obj, key, true);
-      return true;
+    const key = `${typeof item}${JSON.stringify(item)}`;
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      return false;
     }
-    return false;
+    obj[key] = true;
+    return true;
   });
 }
 console.log(unique9(arr9)); // [{ value: 1 }, { value: 2 }];
@@ -167,12 +168,12 @@ console.log('%c---------------->', 'color: red;');
 const unique = (arr: any[]) => [...new Set(arr)];
 // eslint-disable-next-line no-new-wrappers
 const arr = [1, 1, '1', '1', null, null, undefined, undefined, new String('1'), new String('1'), /a/, /a/, NaN, NaN];
-console.log(unique1(arr));
-console.log(unique2(arr));
-console.log(unique3(arr));
-console.log(unique7(arr));
-console.log(unique8(arr));
-console.log(unique9(arr));
-console.log(unique(arr));
+console.log('for循环--', unique1(arr));
+console.log('indexof--', unique2(arr));
+console.log('排序', unique3(arr));
+console.log('filter + indexOf --', unique7(arr));
+console.log('filter + 排序 --', unique8(arr));
+console.log('键值对--', unique9(arr));
+console.log('set--', unique(arr));
 
 export {};

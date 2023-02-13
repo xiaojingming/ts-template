@@ -6,8 +6,8 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   // entry: './ts/es6/handbook.ts',
-  // entry: './ts/es6-2/symbol.ts',
-  entry: './ts/topic4/bind.ts',
+  // entry: './ts/es6-3/symbol.ts',
+  entry: './ts/topic4/minMax.ts',
   mode: 'development',
   optimization: {
     emitOnErrors: true,
