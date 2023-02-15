@@ -20,5 +20,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/extensions': 'off',
     'no-debugger': 'off',
+    'no-unused-vars': 'off',
   },
 };

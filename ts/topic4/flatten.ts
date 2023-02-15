@@ -34,6 +34,7 @@ const arr2 = [1, [2, [3, 4]]];
 function flatten2(arr: any[]) {
   return arr.toString().split(',').map((item) => Number(item));
 }
+
 console.log(flatten2(arr2)); // [1, 2, 3, 4]
 console.log('%c---------------->', 'color: red;');
 
